@@ -1,5 +1,6 @@
-var app = (function () {
 
+var app = (function () {
+    var canal=null;
     class Point {
         constructor(x, y) {
             this.x = x;
@@ -39,7 +40,7 @@ var app = (function () {
                 var npoint = JSON.parse(eventbody.body);
                 //var npoint2 = new Point(npoint.data.x,npoint.data.y)
                 //console.log(npoint2+"------------------")
-                alert("Si funciono!!");
+                //alert("Si funciono!!");
                 addPointToCanvas(npoint);
 
             });
@@ -51,8 +52,23 @@ var app = (function () {
 
     return {
 
-        init: function (id) {
+        init: function () {
             var can = document.getElementById("canvas");
+            //console.log(canal);
+            app.disconnect();
+            
+           /* if(canal!=""){
+                app.disconnect();
+                canal = id;
+                connectAndSubscribe(id);
+            }
+            else{
+                canal=id;
+                connectAndSubscribe(id);
+            }    */
+            id=$('#numero').val();
+            connectAndSubscribe(id);
+            
             can.addEventListener("click", function (evt) {
                 var coord = getMousePosition(evt);
                 let px = coord.x;
@@ -61,7 +77,7 @@ var app = (function () {
                 app.publishPoint(px,py,id);
             })
             //websocket connection
-            connectAndSubscribe(id);
+            
         },
 
         publishPoint: function (px, py,id) {
@@ -78,7 +94,7 @@ var app = (function () {
             if (stompClient !== null) {
                 stompClient.disconnect();
             }
-            setConnected(false);
+            //setConnected(false);
             console.log("Disconnected");
         }
     };
